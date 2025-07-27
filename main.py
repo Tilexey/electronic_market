@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS customers (
 
 #Таблиця "orders": 
 cursor.execute('''
-CREATE TABLE orders ( 
+CREATE TABLE IF NOT EXISTS orders ( 
     order_id INTEGER PRIMARY KEY AUTOINCREMENT, 
     customer_id INTEGER NOT NULL, 
     product_id INTEGER NOT NULL, 
@@ -33,3 +33,18 @@ CREATE TABLE orders (
     FOREIGN KEY (customer_id) REFERENCES customers(customer_id), 
     FOREIGN KEY (product_id) REFERENCES products(product_id) 
 )''')
+
+while True:
+    print('Press 0 to exit')
+    print('Press 1 to add a product')
+    num = int(input())
+    if num == 0:
+        break
+    elif num == 1:
+        name = str(input('Enter product name: '))
+        category = str(input('Enter product category: '))
+        price = int(input('Enter product price in $: '))
+        cursor.execute('''INSERT INTO products (name, category, price) VALUES (?,?,?)''', (name, category, price)
+                       )
+        con.commit()
+        
